@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-
+import parse from "html-react-parser";
+import { Link, NavLink } from "react-router-dom";
+import BookingForm from "./BookingForm";
 const Mainpage = () => {
   const Base_URL = "https://api.tvmaze.com/search/shows?q=all";
   const [data, setData] = useState([]);
@@ -13,29 +15,20 @@ const Mainpage = () => {
     <div>
       {data.map((item) => {
         return (
-          <>
-            <div className="container mx-auto mt-4">
-              <div className="row">
-                <div className="col-md--4">
-                  <div className="card">
-                    <img
-                      className="card-img-top"
-                      src={item.show.image.medium}
-                      alt={item.show.name}
-                    />
-                    <div className="card-body">
-                      <h5 className="card-title">{item.show.name}</h5>
-                      <article className="card-subtitle mb-2 text-muted">
-                        {item.show.summary}
-                      </article>
-                      <a href={item.show.url} className="btn mr-2">
-                        <i className="fas fa-link"></i> Visit Site
-                      </a>
-                    </div>
+          <> 
+              {data.map((item) => {
+                return (
+                  <div key={item.show.id}>
+                    <h2>{item.show.name}</h2>
+                    <img src={item.show.image.medium} />
+                    <p>{parse(item.show.summary)}</p>
+                    {/* <NavLink to={`/show/${item.show.summary}`}>View Summary</NavLink> */}
+                        <NavLink to='/booking' >Book Tickets</NavLink>
+                        <BookingForm showName={data.show.name}/>
+                       
                   </div>
-                </div>
-              </div>
-            </div>
+                );
+              })}
           </>
         );
       })}
